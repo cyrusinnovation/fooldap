@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Aanand Prasad"]
   s.email       = ["aanand.prasad@gmail.com"]
-  s.homepage    = "http://github.com/aanand/fakeldap"
+  s.homepage    = "http://github.com/cyrusinnovation/fakeldap"
   s.summary     = "A fake LDAP server for use in testing"
 
   s.add_development_dependency "rake"
@@ -17,6 +17,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "net-ldap"
   s.add_development_dependency "ruby-ldapserver"
 
-  s.files        = Dir.glob("{lib,vendor}/**/*") + %w(LICENSE README.md)
+  s.files        = Dir.glob("lib/**/*") + %w(LICENSE README.md)
   s.require_path = 'lib'
 end

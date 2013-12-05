@@ -4,7 +4,7 @@ PATH
     fakeldap (0.0.1)
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     diff-lcs (1.2.5)
     net-ldap (0.3.1)

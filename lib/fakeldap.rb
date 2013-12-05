@@ -1,4 +1,3 @@
-$:.unshift(File.expand_path('../../vendor/ruby-ldapserver/lib', __FILE__))
 require 'ldap/server'
 
 module FakeLDAP

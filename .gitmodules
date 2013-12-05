@@ -1,3 +1,0 @@
-[submodule "vendor/ruby-ldapserver"]
-	path = vendor/ruby-ldapserver
-	url = git://github.com/aanand/ruby-ldapserver.git

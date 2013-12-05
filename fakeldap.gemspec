@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 lib = File.expand_path('../lib/', __FILE__)
 $:.unshift lib unless $:.include?(lib)
 
@@ -13,11 +12,11 @@ Gem::Specification.new do |s|
   s.homepage    = "http://github.com/aanand/fakeldap"
   s.summary     = "A fake LDAP server for use in testing"
 
-  s.add_development_dependency "rspec", "~> 2.0.0.beta.22"
+  s.add_development_dependency "rake"
+  s.add_development_dependency "rspec"
   s.add_development_dependency "net-ldap"
-  s.add_development_dependency "ruby-debug19"
+  s.add_development_dependency "ruby-ldapserver"
 
   s.files        = Dir.glob("{lib,vendor}/**/*") + %w(LICENSE README.md)
   s.require_path = 'lib'
 end
-

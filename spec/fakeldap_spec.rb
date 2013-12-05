@@ -16,6 +16,8 @@ describe FakeLDAP::Server do
     @server.run_tcpserver
     @server.add_user(@toplevel_user_dn, @toplevel_user_password)
     @server.add_user(@regular_user_dn, @regular_user_password)
+    @server.add_user('cn=one_user,ou=USERS,dc=example,dc=com', @regular_user_password)
+    @server.add_user('cn=other_user,ou=USERS,dc=example,dc=com', @regular_user_password)
   end
 
   after :all do
@@ -91,7 +93,7 @@ describe FakeLDAP::Server do
     end
   end
 
-  describe "searching for groups" do
+  describe "searching" do
     before :all do
       @server.add_group("cn=Exclusive_group,ou=group,dc=example,dc=com", ["uid=one_user,#{USERS_BASE}"])
       @server.add_group("cn=Everyone,ou=group,dc=example,dc=com", ["uid=one_user,#{USERS_BASE}", "uid=other_user,#{USERS_BASE}"])
@@ -117,10 +119,13 @@ describe FakeLDAP::Server do
       groups.size.should == 1
       groups.first.dn.should =~ /cn=Everyone/
     end
-  end
 
-  describe "searching for users" do
-
+    it 'should return the correct users' do
+      users = @client.search(base: USERS_BASE,
+                                     :filter => Net::LDAP::Filter.construct("(cn=one_user)"))
+      users.size.should == 1
+      users.first.dn.should =~ /cn=one_user,/
+    end
   end
 end
 

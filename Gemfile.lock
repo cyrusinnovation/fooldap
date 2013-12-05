@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     fakeldap (0.0.1)
+      ruby-ldapserver
 
 GEM
   remote: https://rubygems.org/
@@ -27,4 +28,3 @@ DEPENDENCIES
   net-ldap
   rake
   rspec
-  ruby-ldapserver

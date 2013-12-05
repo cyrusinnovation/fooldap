@@ -4,11 +4,16 @@ module FakeLDAP
   class Server < LDAP::Server
     def initialize(options={})
       @users = {}
+      @groups = []
       super(default_options.merge(options))
     end
 
     def add_user(user, pass)
       @users[user] = pass
+    end
+
+    def add_group(group, users)
+      @groups << [group, users]
     end
 
     def valid_credentials?(user, pass)
@@ -24,10 +29,18 @@ module FakeLDAP
       }
     end
 
+    def groups
+      @groups
+    end
+
+    def find_groups(user)
+      groups.select { |group, users| users.include? user }
+    end
+
     def default_options
       {
-        :operation_class => ::FakeLDAP::Operation,
-        :operation_args  => [self]
+          :operation_class => ::FakeLDAP::Operation,
+          :operation_args => [self]
       }
     end
   end
@@ -41,24 +54,45 @@ module FakeLDAP
     def simple_bind(version, dn, password)
       unless dn
         raise LDAP::ResultError::InappropriateAuthentication,
-          "This server does not support anonymous bind"
+              "This server does not support anonymous bind"
       end
 
       unless @server.valid_credentials?(dn, password)
         raise LDAP::ResultError::InvalidCredentials,
-          "Invalid credentials"
+              "Invalid credentials"
       end
     end
 
     def search(basedn, scope, deref, filter, attrs=nil)
-      unless filter.first == :eq
-        raise LDAP::ResultError::UnwillingToPerform,
-          "Only equality matches are supported"
-      end
+      group_filter = [:eq, "objectclass", nil, "groupofNames"]
 
-      @server.find_users(basedn, filter).each do |dn|
-        send_SearchResultEntry(dn, {})
+      if filter.first == :eq
+        if filter == group_filter
+          return @server.groups.each { |group| send_group_result(*group) }
+        else
+          return @server.find_users(basedn, filter).each { |dn| send_SearchResultEntry(dn, {}) }
+        end
+      elsif filter.first == :and
+        if filter[1] == group_filter
+          member_eq = filter[2]
+          if member_eq[0] == :eq and member_eq[1] == 'member'
+            user_dn = member_eq[3]
+            return @server.find_groups(user_dn).each { |group| send_group_result(*group) }
+          end
+        end
       end
+      raise LDAP::ResultError::UnwillingToPerform, "Only some matches are supported"
+    end
+
+    private
+
+    def send_group_result(group, users)
+      user_names = users.map { |user| /uid=(?<user_name>.*?),/.match(user)[:user_name] }
+      avs = {'member' => users,
+             'memberuid' => user_names,
+             'objectclass' => ["groupofNames"],
+             'cn' => [/cn=(?<group_name>.*?),/.match(group)[:group_name]]}
+      send_SearchResultEntry(group, avs)
     end
   end
 end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe FakeLDAP::Server do
+describe Fooldap::Server do
   GROUP_BASE = "ou=group,dc=example,dc=com"
   USERS_BASE = "ou=USERS,dc=example,dc=com"
   before :all do
@@ -12,7 +12,7 @@ describe FakeLDAP::Server do
     @regular_user_dn = "cn=regular_user,ou=USERS,dc=example,dc=com"
     @regular_user_password = "regular_password"
 
-    @server = FakeLDAP::Server.new(:port => @port)
+    @server = Fooldap::Server.new(:port => @port)
     @server.run_tcpserver
     @server.add_user(@toplevel_user_dn, @toplevel_user_password)
     @server.add_user(@regular_user_dn, @regular_user_password)

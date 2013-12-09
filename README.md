@@ -1,4 +1,4 @@
-Install: `gem install fakeldap`
+Install: `gem install fooldap`
 
 Only supports bind operations for now.
 

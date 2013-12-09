@@ -1,6 +1,6 @@
 require 'ldap/server'
 
-module FakeLDAP
+module Fooldap
   class Server < LDAP::Server
     def initialize(options={})
       @users = {}
@@ -39,7 +39,7 @@ module FakeLDAP
 
     def default_options
       {
-          :operation_class => ::FakeLDAP::Operation,
+          :operation_class => ::Fooldap::Operation,
           :operation_args => [self]
       }
     end

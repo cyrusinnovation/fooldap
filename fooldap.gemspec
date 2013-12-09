@@ -1,15 +1,15 @@
 lib = File.expand_path('../lib/', __FILE__)
 $:.unshift lib unless $:.include?(lib)
 
-require 'fakeldap/version'
+require 'fooldap/version'
 
 Gem::Specification.new do |s|
-  s.name        = "fakeldap"
-  s.version     = FakeLDAP::VERSION
+  s.name        = "fooldap"
+  s.version     = Fooldap::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["Aanand Prasad"]
-  s.email       = ["aanand.prasad@gmail.com"]
-  s.homepage    = "http://github.com/cyrusinnovation/fakeldap"
+  s.authors     = ["Matt Raibert"]
+  s.email       = ["mraibert@cyrusinnovation.com"]
+  s.homepage    = "http://github.com/cyrusinnovation/fooldap"
   s.summary     = "A fake LDAP server for use in testing"
 
   s.add_development_dependency "rake"

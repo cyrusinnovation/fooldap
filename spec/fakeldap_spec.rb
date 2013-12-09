@@ -120,9 +120,15 @@ describe FakeLDAP::Server do
       groups.first.dn.should =~ /cn=Everyone/
     end
 
+    it 'should return the requested group' do
+      groups = @client.search(base: "cn=Everyone,ou=group,dc=example,dc=com")
+      groups.size.should == 1
+      groups.first.dn.should =~ /cn=Everyone/
+    end
+
     it 'should return the correct users' do
       users = @client.search(base: USERS_BASE,
-                                     :filter => Net::LDAP::Filter.construct("(cn=one_user)"))
+                             :filter => Net::LDAP::Filter.construct("(cn=one_user)"))
       users.size.should == 1
       users.first.dn.should =~ /cn=one_user,/
     end

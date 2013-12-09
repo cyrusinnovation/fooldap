@@ -66,6 +66,11 @@ module FakeLDAP
     def search(basedn, scope, deref, filter, attrs=nil)
       group_filter = [:eq, "objectclass", nil, "groupofNames"]
 
+      if filter == [:true]
+        groups = @server.groups.select { |dn, users| dn =~ /#{basedn}/ }
+        return groups.each { |dn, users| send_group_result(dn, users) }
+      end
+
       if filter.first == :eq
         if filter == group_filter
           return @server.groups.each { |group| send_group_result(*group) }
